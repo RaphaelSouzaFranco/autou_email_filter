@@ -19,9 +19,8 @@ app = Flask(
 # Habilita CORS para aceitar requisições do frontend no Vercel
 CORS(app)
 
-# Config OpenAI
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-openai.api_key = OPENAI_API_KEY
+# Config OpenAI usando a nova interface
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # NLP setup
 nltk.download('stopwords')
@@ -52,8 +51,7 @@ def classify_email(text):
     )
 
     try:
-        # Nova interface compatível com openai>=1.0
-        response = openai.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
             temperature=0
