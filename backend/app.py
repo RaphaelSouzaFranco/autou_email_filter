@@ -37,9 +37,18 @@ def preprocess_text(text):
 
 def classify_email(text):
     prompt = (
-        f"Classifique o email abaixo como Produtivo ou Improdutivo "
-        f"e sugira uma resposta curta apropriada:\n\n{text}\n\n"
-        f"Retorne um JSON válido no formato: {{\"category\": \"\", \"reply\": \"\"}}"
+        f"Você é um assistente especializado em classificar e-mails de trabalho.\n\n"
+        f"Sua tarefa é classificar o email abaixo como **Produtivo** ou **Improdutivo**, "
+        f"seguindo estas regras:\n"
+        f"- **Produtivo:** emails que trazem informações importantes, tarefas, solicitações, decisões, resultados ou qualquer conteúdo que contribua para o trabalho.\n"
+        f"- **Improdutivo:** emails irrelevantes, promocionais, triviais, pessoais, de spam ou que não agregam valor ao trabalho.\n\n"
+        f"Para cada email, sugira uma **resposta curta e educada**, adequada ao contexto.\n\n"
+        f"Exemplos de saída JSON correta:\n"
+        f'{{"category": "Produtivo", "reply": "Obrigado, recebi sua mensagem e darei andamento."}}\n'
+        f'{{"category": "Improdutivo", "reply": "Obrigado pelo envio, manterei em mente."}}\n\n'
+        f"Email a classificar:\n{text}\n\n"
+        f"Retorne **somente um JSON válido**, sem explicações ou textos adicionais, "
+        f"no formato: {{\"category\": \"\", \"reply\": \"\"}}"
     )
 
     try:
