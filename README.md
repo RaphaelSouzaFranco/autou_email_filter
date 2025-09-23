@@ -6,8 +6,8 @@ O **AutoU** é uma ferramenta web que classifica e-mails como **Produtivo** ou *
 
 ## Demo
 
-- Backend hospedado no Render: `https://autou-email-filter-5.onrender.com`  
-- Frontend hospedado no Vercel: `https://autou-email-filter.vercel.app/`
+- Backend hospedado no Render: `https://autou-email-filter-7.onrender.com/`  
+- Frontend hospedado no Vercel: `https://autou-email-filter-o4uj.vercel.app/`
 
 ---
 
