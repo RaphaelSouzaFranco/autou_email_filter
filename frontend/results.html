@@ -1,0 +1,28 @@
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resultado - AutoU</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/frontend/styles/styles.css" rel="stylesheet">
+</head>
+
+<body class="dark-bg d-flex flex-column justify-content-center align-items-center">
+    <h1 class="mb-4 text-center text-white">Resultado da Classificação</h1>
+
+    <div class="glass-card w-100" style="max-width:500px; padding:2rem;">
+        <h5 class="card-title text-white">Categoria:</h5>
+        <p class="fs-4 text-white">{{ category }}</p>
+
+        <h5 class="card-title text-white">Resposta sugerida:</h5>
+        <pre class="text-white" style="white-space: pre-wrap;">{{ reply }}</pre>
+
+        <h5 class="card-title text-white">Texto original (preview):</h5>
+        <div style="max-height:240px; overflow:auto; background:#1e1e1e; color:#fff; padding:10px;">{{ original }}</div>
+
+        <a href="/" class="btn btn-secondary mt-3 w-100">Classificar outro</a>
+    </div>
+</body>
+
+</html>

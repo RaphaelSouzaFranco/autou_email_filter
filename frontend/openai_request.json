@@ -1,0 +1,15 @@
+{
+  "model": "gpt-3.5-turbo",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Você é um assistente que classifica emails como Produtivo ou Improdutivo e sugere uma resposta adequada."
+    },
+    {
+      "role": "user",
+      "content": "EMAIL_AQUI"
+    }
+  ],
+  "temperature": 0.5,
+  "max_tokens": 200
+}
