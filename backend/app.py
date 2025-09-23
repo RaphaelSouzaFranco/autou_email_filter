@@ -52,13 +52,14 @@ def classify_email(text):
     )
 
     try:
-        response = openai.ChatCompletion.create(
+        # Nova interface compatível com openai>=1.0
+        response = openai.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
             temperature=0
         )
 
-        answer = response['choices'][0]['message']['content']
+        answer = response.choices[0].message.content
 
         # Garante que o JSON seja válido
         result = json.loads(answer.replace("'", '"'))
