@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, jsonify, render_template, send_from_directory
 import openai
 import re
+import json
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer
@@ -28,26 +29,38 @@ stop_words = set(stopwords.words('portuguese'))
 stemmer = SnowballStemmer('portuguese')
 
 def preprocess_text(text):
+    # Remove caracteres especiais
     text = re.sub(r'[^a-zA-ZÀ-ÿ\s]', '', text)
-    tokens = [word.lower() for word in text.split() if word.lower() not in stop_words]
-    tokens = [stemmer.stem(word) for word in tokens]
+    # Remove stopwords e aplica stemming
+    tokens = [stemmer.stem(word.lower()) for word in text.split() if word.lower() not in stop_words]
     return ' '.join(tokens)
 
 def classify_email(text):
-    prompt = f"Classifique o email abaixo como Produtivo ou Improdutivo e sugira uma resposta curta apropriada:\n\n{text}\n\nFormato JSON: {{'category': '', 'reply': ''}}"
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role":"user","content":prompt}],
-        temperature=0
+    prompt = (
+        f"Classifique o email abaixo como Produtivo ou Improdutivo "
+        f"e sugira uma resposta curta apropriada:\n\n{text}\n\n"
+        f"Retorne um JSON válido no formato: {{\"category\": \"\", \"reply\": \"\"}}"
     )
-    answer = response['choices'][0]['message']['content']
+
     try:
-        result = eval(answer)
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0
+        )
+
+        answer = response['choices'][0]['message']['content']
+
+        # Garante que o JSON seja válido
+        result = json.loads(answer.replace("'", '"'))
         category = result.get('category', 'Improdutivo')
         reply = result.get('reply', 'Obrigado pelo contato.')
-    except:
+
+    except Exception as e:
+        print("Erro ao processar OpenAI:", e)
         category = 'Improdutivo'
         reply = 'Obrigado pelo contato.'
+
     return category, reply
 
 # Rota principal
@@ -60,6 +73,7 @@ def home():
 def classify():
     data = request.get_json()
     email_text = data.get("email_text", "").strip()
+
     if not email_text:
         return jsonify({"error": "Texto vazio"}), 400
 
