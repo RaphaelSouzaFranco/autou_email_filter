@@ -42,12 +42,9 @@ def classify_email(text):
         f"- **Produtivo:** emails que trazem informações importantes, tarefas, solicitações, decisões, resultados ou qualquer conteúdo que contribua para o trabalho.\n"
         f"- **Improdutivo:** emails irrelevantes, promocionais, triviais, pessoais, de spam ou que não agregam valor ao trabalho.\n\n"
         f"Para cada email, sugira uma **resposta curta e educada**, adequada ao contexto.\n\n"
-        f"Exemplos de saída JSON correta:\n"
-        f'{{"category": "Produtivo", "reply": "Obrigado, recebi sua mensagem e darei andamento."}}\n'
-        f'{{"category": "Improdutivo", "reply": "Obrigado pelo envio, manterei em mente."}}\n\n'
-        f"Email a classificar:\n{text}\n\n"
         f"Retorne **somente um JSON válido**, sem explicações ou textos adicionais, "
-        f"no formato: {{\"category\": \"\", \"reply\": \"\"}}"
+        f"no formato: {{\"category\": \"\", \"reply\": \"\"}}\n\n"
+        f"Email a classificar:\n{text}"
     )
 
     try:
@@ -57,12 +54,19 @@ def classify_email(text):
             temperature=0
         )
 
-        answer = response.choices[0].message.content
+        answer = response.choices[0].message.content.strip()
+        print("Resposta bruta do modelo:", answer)  # <-- DEBUG
 
-        # Garante que o JSON seja válido
-        result = json.loads(answer.replace("'", '"'))
-        category = result.get('category', 'Improdutivo')
-        reply = result.get('reply', 'Obrigado pelo contato.')
+        # Extrai somente o JSON válido
+        match = re.search(r'\{.*\}', answer, re.DOTALL)
+        if match:
+            json_str = match.group(0)
+            result = json.loads(json_str)
+            category = result.get('category', 'Improdutivo')
+            reply = result.get('reply', 'Obrigado pelo contato.')
+        else:
+            category = 'Improdutivo'
+            reply = 'Obrigado pelo contato.'
 
     except Exception as e:
         print("Erro ao processar OpenAI:", e)
