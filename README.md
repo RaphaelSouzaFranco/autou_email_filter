@@ -2,6 +2,10 @@
 
 O **AutoU** é uma ferramenta web que classifica e-mails como **Produtivo** ou **Improdutivo** e sugere respostas automáticas apropriadas. Ele utiliza **Flask** no backend e consome a API da OpenAI para realizar a classificação.
 
+# IMPORTANTE
+
+**O deploy feito no Vercel leva um tempo até fazer a requisição ao backend hospedado no Render pela primeira tentativa de filtragem de mensagens. Após essa conexão feita, o processo torna-se mais rápido e eficiente**
+
 ---
 
 ## Demo
